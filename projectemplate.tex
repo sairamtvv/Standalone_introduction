@@ -129,19 +129,19 @@ our work plan is fourfold and execution of it shall proceed in four phases:
     \item 85dB filter rejection of 50Hz and 60Hz
     \item Channel scan data rate of \sim 10kSPS per channel (100\textmu s settling)
     \item An IOT enabled data-acquisition
-    \item Additional Desktop application for bad networking days
+    \item Additional Desktop application 
     \item precision reflecting 1\textmu g inaccuracies
     
 
 \end{itemize}
 
 
-Each of these Phases are described in detail as a separate section below.
+Each of these Phases are described briefly  as a separate section below.
 \newpage
 \section{Phase1 : Programming SOC FPGA}
 
-The first phase and the most prominent step in the implementation of this stand-alone system shall be programming System on Chip (SOC) Field Programmable Gate Array (FPGA). 
-
+The first phase and the most prominent step in the implementation of this stand-alone system shall be programming System on Chip (SOC) Field Programmable Gate Array (FPGA). Moreover, Care is taken throughout
+the report that the idea is conveyed more through the medium of images rather than writing few lengthy paragraphs.
 
 \subsection{Phase1 goal and objectives}
 
@@ -150,7 +150,30 @@ The objective of this phase is to design and install a SOC FPGA system which can
 
 Although FPGA technology might at first seem to not be suitable for the implementation of analog components such as a DAC, their architectures turn out to be very suitable for sigma-delta converters which are primarily digital. Having the flexibility to incorporate DACs into FPGA designs allow for higher levels of integration, reducing cost, board area and possibly power consumption.
 
-An arm based processor with decent RAM like 8GB RAM shall be required and shall act as the master  for all the acquisition and IOT. 
+An arm based processor with decent RAM like 8GB RAM shall be required and shall act as the master  for all the acquisition.
+
+
+
+  \begin{figure}[H]
+ 
+    \begin{subfigure}{\textwidth}
+    \includegraphics[scale=0.8]{fpga_designflow.png} 
+    \label{fig:DJp1}
+    \end{subfigure}
+%    \begin{subfigure}{0.5\textwidth}
+%    \includegraphics[width=1.0\linewidth, height=5cm]{images/DJ_profile2.png}
+%    \label{fig:DJp2}
+%    \end{subfigure}
+ 
+ \caption{Standard FPGA design flow}
+\label{fig6}
+\end{figure}
+
+
+
+
+
+
 
 
 \subsubsection{Software front on programming for sigma-delta}
@@ -274,12 +297,149 @@ interpolation ratios.
 \newpage
 
 \section{Phase 2 : Designing an IOT system}
-An IOT (Internet of Things) system shall be designed where an user can access the data and control the flow using an IOT enabled device. 
+This attempt during this phase shall be to measure and store any kind of electrical and non-electrical signals in embedded web server and be able to control the devices remotely.
+
+\subsection{Introduction to RTOS}
+To  heighten the  reliance on technology to execute crucial tasks implementation has led to the usage of high-performance real-time operating systems(RTOS) in this project. 
+
+A real-time operating system (RTOS) is an operating system that works in real time, with deterministic constraints that require efficient time usage and power to process incoming data and relay the expected results without any unknown or unexpected delays. RTOS software is time dependent, meaning that it should process input and offer output within a short predetermined deterministic period. However the key to an RTOS, and the most important demand of RTOS software is that a request and response for data is guaranteed to occur. If a Windows OS has request and response calls that are fast 90\% of the time, yet the remaining 10\% of the time an input/output request takes too long, then the real-time application is not performing correctly. Thus an RTOS is not meant to be only fast, it is more importantly meant to be dependable
+
+\subsection{Client-Server Architecture}
+A web server is a system which hosts websites and provides services for any requesting clients. The general
+purpose web server composes of an operating system, web pages or web applications and a huge amount of memory
+and sometimes a special hardware. The following figure Shows the typical client-server architecture.
+
+
+A Client can
+access the industry’s web server through internet and LAN router. Digitally acquired data are stored in web server’s
+data base. Whenever the client wants to access data, it sends the request to server; this request is taken by the router,
+which is connected to the internet. The web processes the request made and finally connects to the desired web
+server, access the requested data and sends the data to the client.
+A web server is a system which hosts websites and provides services for any requesting clients. The general purpose web server composes of an operating system, web pages or web applications and a huge amount of memory and sometimes a special hardware. The following figure shows the typical client-server architecture. 
+
+  \begin{figure}[H]
+ 
+    \begin{subfigure}{\textwidth}
+    \includegraphics[scale=0.8]{Client_Server_arch.png} 
+    \label{fig:DJp1}
+    \end{subfigure}
+%    \begin{subfigure}{0.5\textwidth}
+%    \includegraphics[width=1.0\linewidth, height=5cm]{images/DJ_profile2.png}
+%    \label{fig:DJp2}
+%    \end{subfigure}
+ 
+ \caption{Typical Client-Server Architecture}
+\label{fig6}
+\end{figure}
+
+
+A Client can access the industry’s web server through internet and LAN router. Digitally acquired data are stored in web server’s
+data base. Whenever the client wants to access data, it sends the request to server; this request is taken by the router,
+which is connected to the internet. The web processes the request made and finally connects to the desired web
+server, access the requested data and sends the data to the client.
+
+
+\subsection{Embedded Web server architecture}
+General web servers, which were developed for general-purpose computers such as NT servers or UNIX workstations, typically require megabytes of memory, a fast processor, a preemptive multitasking operating system, and other resources. A web server can be embedded in a device to provide remote access to the device from a web
+browser. The embedded system can be utilized to serve the embedded web documents, including static and dynamic
+information about industry machinery's/systems to web browsers. This type of web server is called an Embedded Web Server.
+An embedded web server is an ARM processor that contains an internet software suite as well as
+application code for monitoring and controlling machines/systems. Embedded web servers are integral part of an
+embedded network.
+
+  \begin{figure}[H]
+ 
+    \begin{subfigure}{\textwidth}
+    \includegraphics[scale=0.8]{embedded_web_server.png} 
+    \label{fig:DJp1}
+    \end{subfigure}
+%    \begin{subfigure}{0.5\textwidth}
+%    \includegraphics[width=1.0\linewidth, height=5cm]{images/DJ_profile2.png}
+%    \label{fig:DJp2}
+%    \end{subfigure}
+ 
+ \caption{Embedded Web-Server Architecture}
+\label{fig6}
+\end{figure}
+
+
+
+\subsection{Reason for choosing RTOS}
+
+The RTOS manages all the required tasks in parallel and in small amounts of time. Web based management
+user interfaces using embedded web server have many advantages: ubiquity, user-friendly, low-development cost
+and high maintainability. Embedded web server is employed based on the  requirement such as low resource usage, high
+reliability, security, portability and controllability for which general web server technologies are unsuitable.
+
+
+\subsection{Software Design of the system}
+Unlike Linux, RTLinux provides hard real-time capability. It has a hybrid kernel architecture with a small real-time
+kernel coexists with the Linux kernel running as the lowest priority task. This combination allows RTLinux to
+provide highly optimized, time-shared services in parallel with the real-time, predictable, and low-latency execution.
+Besides this unique feature, RTLinux is freely available to the public. 
+ 
+
+  \begin{figure}[H]
+ 
+    \begin{subfigure}{\textwidth}
+    \includegraphics[scale=0.8]{rtlinux.png} 
+    \label{fig:DJp1}
+    \end{subfigure}
+%    \begin{subfigure}{0.5\textwidth}
+%    \includegraphics[width=1.0\linewidth, height=5cm]{images/DJ_profile2.png}
+%    \label{fig:DJp2}
+%    \end{subfigure}
+ 
+ \caption{Run-time model of RT linux}
+\label{fig6}
+\end{figure}
+
+
+\subsection{Components of a RTOS}
+A real-time operating system includes multiple components as follows:
+\begin{itemize}
+    \item \textbf{The scheduler:} This is the main RTOS element that determines the order of execution of tasks or threads usually based on a priority scheme, and either in a run to completion or round robin fashion. Some RTOS may try to load balance thread across processors but most require developers to assign process affinity to cores to optimize real-time application resource usage.
+
+\item \textbf{Symmetric Multiprocessing (SMP):} An RTOS has the ability to handle and separate multiple tasks or threads so that they can be run on multiple cores to allow for parallel processing of code (i.e. multitasking).
+
+\item  \textbf{Function library:} Is a standard interface that can contain an application program interface (API) to call routines within it, this is the interface that connects that application code and the kernel. Application code entities direct requests to the kernel via the function library to prompt the application to give the desired programmatic behavior.
+
+\item  \textbf{Fast dispatch latency/context switch time:} Dispatch latency represents the time from when the operating system identifies that a task has finished and until a ready to run thread is started or when an event is triggered that causes a higher priority tasks to preempt a currently running task. The context switch is the time it takes for the scheduled to switch from one running thread to another thread, this involved saving off the context of the current task and replacing it with the context of the new thread to run.In an RTOS, the switching time should remain deterministic and minimal.
+
+\item  \textbf{User-defined data objects and classes:} An RTOS relies on programming languages with data structures that are organized based on their type of operation. The user defines object sets through a specified programming language like C++ that the RTOS will use in to control the specified application.
+
+\item  \textbf{Memory Management:} Memory management is required to allocate memory for every program to be run or object to be referenced in memory. In an RTOS this is important, since unlike General Purpose OSes like Windows it can’t afford to have memory paged in or out since it leads to non-deterministic behavior.
+
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \subsection{Feasibility}
+An SOC (System On Chip) shall be employed to achieve this desired goal.  To meet the above requirements a combination of software and hardware needs to be implemented. Thus, an embedded system shall be designed in a RTlinux specifically petalinux in an embedded Web-server architecture.
 
-An SOC (System On Chip) shall be employed to achieve this desired goal.  To meet the above requirements a combination of software and hardware needs to be implemented. Thus, an embedded system shall be designed in a master-slave architecture to control the devices and acquire data.
+
+
 
 \newpage
 \section{Phase 3: Designing Mechanical fixture}
@@ -298,17 +458,29 @@ Mechanical fixture to hold all the eight sensors needs to be designed. The desig
 
 \newpage
 \section{Phase 4: A Desktop application}
-A Desktop application to access and analyse data from a local server is also planned. Taking into consideration that the networking issues should not effect the data logging, a local server is also planned. In case of any networking issues, the user can shift to desktop application and log the data into the local server. Furthermore, a desktop application shall also be built which shall retrieve, analyze and represent the data in the user defined manner.
+A Desktop application to access and analyse data from a local server is also planned. Taking into consideration that the networking issues should not effect the data logging, a local server is also planned. In case of any networking issues, the user can shift to desktop application and log the data into the local server. This desktop application shall  be built with these three-fold features:
+\begin{enumerate}
+    \item \textbf{Acquire:} The multiple weeks 
+    \item \textbf{Retrieve:} This software shall be able to retrieve data from the local server for the purpose of verification for the user
+    \item \textbf{Analyze:} The Post-acquisition analysis that includes myriad calculations shall be performed for generating a validatory report.
+    \item \textbf{Represent:}Representation of data is one of the crucial steps for obtaining insights in projects like these. The software developed would portray the data as per the guidelines of the user to obtain meaningful conclusions from the data.
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 
  \section{Validation}
- The validation of this project shall be two-fold:
- \subsection{Hardware Front}
- 
- \subsection{Software front}
- 
- 
- 
+ \textcolor{red}{Re-work necessary}
 In short, DAQ can be validated by the user by acquiring the data from all the Eight acccelerometer sensors. The data obtained in their desired format validates the project.
 
 
@@ -330,7 +502,7 @@ In short, DAQ can be validated by the user by acquiring the data from all the Ei
      \begin{enumerate}
          \item IOT enabled SOC 
          \item Mechanical fixtures/jigs for housing accelerometers
-         \item An independent power supply or an in-house with three independent channels with less than 3 mV ripple V$_{rms}$.
+         \item An independent power supply or an in-house with three independent channels with less than 5 mV ripple V$_{rms}$.
      \end{enumerate}
     \item USB type C cable
     \item Software for post-analysis and graphical representation
@@ -345,135 +517,10 @@ In short, DAQ can be validated by the user by acquiring the data from all the Ei
 Many other alternative plans have been proposed. This route and budget is proposed after a series of discussions with RCI incharges regarding their technical requirement for a turn-key solution.
 
 \subsection{Intellectual Merit}
-We offer a high-end, high-tech simulation, automation and precision  manufacturing solutions. Our group comprises of accomplished professionals from a variety of backgrounds, including electrical, mechanical,  underground instrumentation and measurement. We offer solutions to improve the quality, durability, and reliability of the final products, processes or tasks. 
+We offer a high-end, high-tech simulation, automation and precision  manufacturing solutions. Our group comprises of accomplished professionals from a variety of backgrounds, including electrical, software, mechanical,  underground instrumentation and measurement. We offer solutions to improve the quality, durability, and reliability of the final products, processes or tasks. 
 
 \newpage
-\subsection{Budget for a high end PC }
-As mentioned earlier, computer with good processing is a must for successful completion of the project. To this end, we suggest a high end system. An high end assembled PC balanced both in terms of its performance and cost is given below.
-\begin{center}
-\begin{tabular}[h]{||c ||c|| p{6 cm}|| c|| }
-\arrayrulecolor{Azzurro}
-\hline
-\hline
-{\bfseries S.No} & {\bfseries Item Name}& {\bfseries Item Description} & {\bfseries Cost (Rs)} \\
-\hline
-\hline
-1 & Processor & Intel i7-9700k & 36,000\\
-\hline
-\hline
-2 &Motherboard & Msi MPG Z390M Gaming Edge AC  (MICRO ATX) & 16,500  \\
-\hline
-\hline
-3 &RAM & G.Skill Ripjaws or Corsair Vengence DDR4 C19L 3600mhz 8GB*2=16Gb & 8,500\\ 
-\hline 
-\hline
-4 &Internal HDD & Seagate Barracuda 2TB & 4500\\ 
-\hline
-\hline
-5 &Solid State Drive & 1Samsung 970 Evo Plus M.2 Nvme 500GB  & 10000\\
-\hline
-\hline
-6 &DVD Drive & LG or Asus DVD-RW/16x & 1000\\
-\hline
-\hline
-7 &Power Supply Unit (SMPS) &  Corsair TX 650M (GOLD Certified) & 8000\\
-\hline
-\hline
-8 &Cabinet &  Corsair TX 650M (GOLD Certified) & 8000\\
-\hline
-\hline
-9 &Power Supply Unit (SMPS) &  Corsair TX 650M (GOLD Certified)  & 8000\\
-\hline
-\hline
-10 &Cabinet &  CoolerMaster Mid Tower ATX  & 8000\\
-\hline
-\hline
-11 &Monitor &  Dell 24inch IPS LCD SE2419H  & 11.000\\
-\hline
-\hline
-12 &Keyboard and Mouse &  Dell Wireless WK117  & 1300\\
-\hline
-\hline
- & Total & & 1,04,800
- 
- \end{tabular}
-\end{center}
 
-
-
-
-
-
-\newpage
-\subsection{Costs incurred for Product Development}
-\begin{center}
-\begin{tabular}{||p{3 cm} ||p{4 cm}|| p{5 cm}|| p{2 cm}|| }
-\arrayrulecolor{Azzurro}
-\hline
-\hline
-
-{\bfseries Phase/Item name } & {\bfseries Operation}& {\bfseries Description} & {\bfseries Cost INR} \\
-
-\hline
-\hline
-Hardware procurement & & &15,000 \\
-\hline
-\hline
-PCB designing & utilization Proteus Schematic Capture and PCB Layout modules  & Licensing of Proteus Enterprise Edition costed us \$6,592& Not levying any charges for this\\ 
-\hline 
-\hline
-PCB Manufacturing for prototyping & Shall be procured from a local vendor which includes both manufacturing and population charges & This shall be utilized to get approval from the user& 10,000\\
-\hline 
-\hline
-PCB Manufacturing for final PCB  & Shall be procured from a class A manufacturer & costing includes both manufacturing and population charges&20,000\\
-\hline 
-\hline
-In-burn testing & stress testing & Checking any defects during PCB manufacturing or population&5,000 \\
-\hline 
-\hline
-Casing & - & Should house on the surface 9 D-pin connectors and 20 switches. should have electric casing, USB and LAN port & 10000\\
-\hline
-\hline
-& Total & & 60,000
- 
- \end{tabular}
-\end{center}
-Ideally, we should be able to complete earlier to this. However, PCB manufacturing delays or component procurement delays may add up to this.
-
-
-\newpage
-\subsection{Resources required}
-\begin{center}
-\begin{tabular}{||p{3 cm} ||p{4 cm}|| p{6 cm}|| c|| }
-\arrayrulecolor{Azzurro}
-\hline
-\hline
-{\bfseries S.No} & {\bfseries Item Name}& {\bfseries Item Description} & {\bfseries Cost (Rs)} \\
-\hline
-\hline
-Nine extender's for accelerometer &straight cable D-pin connectors & Required for aesthetic connections & 1000\\
-\hline
-\hline
-Two mini USB extenders & Male to female mini USB connectors& Extend the communication from the embedded system to the computer, 3000 $\times$2 & 6000\\
-\hline
-\hline
-Windows 7/8 software & &   & 8000\\
-\hline
-\hline
-Ethernet switch & Required for networking & &1000\\
-\hline
-\hline
-Networking Cables & 2 to 3 cables & Required for networking &500\\
-\hline
-\hline
-& Total & & 16,500
- 
- \end{tabular}
-\end{center}
-
-
-
-\newpage
 \subsection{Human Resources}
 A Doctorate holding professional shall be made in-charge for this entire project. He shall be overlooking the entire project and guides the engineers to implement it successfully. He shall be on-looking three other projects, which happens to be 20,000. 
 \begin{center}
@@ -488,7 +535,7 @@ A Doctorate holding professional shall be made in-charge for this entire project
  Doctorate holding Professional  & In-charge and overlooks the entire project &1 & 20,000 & 8 months & 8 months$\times$ 20,000=1,60,000\\
 \hline
 \hline
-Electrical engineer & Design and optimization of the hardware, one looks after electronics and the other looks after communication  &1 & 45,000 & 8 months & 8 months $\times$ 45,000=3,60,000\\
+VHDL (verilog) Programmer& Design and optimization of the hardware, one looks after electronics and the other looks after communication  &1 & 45,000 & 8 months & 8 months $\times$ 45,000=3,60,000\\
 \hline
 \hline
 Electrical engineer &Programming for the interfacing, low level interfacing using C and high level integration with python  &1 & 45,000 & 8 months & 8 months $\times$ 45,000=3,60,00\\
@@ -536,6 +583,103 @@ software design environment & This involves coding for three modes of operation 
 
 
 
+
+
+
+
+
+
+\newpage
+
+\subsection{Costs incurred for Product Development}
+
+\definecolor{Gray}{gray}{0.9}
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+\definecolor{orange}{rgb}{1,0.86,0.5}
+
+\begin{table}[ht]
+%\color{white}
+\setlength{\extrarowheight}{15pt}
+\begin{tabular}{||p{3 cm} ||p{4 cm}|| p{5 cm}|| p{2 cm}|| }
+\hline
+\hline
+\rowcolor{orange}
+\hline
+\hline
+
+
+{\bfseries Phase/Item name } & {\bfseries Operation}& {\bfseries Description} & {\bfseries Cost INR} \\
+
+\arrayrulecolor{white}
+
+\rowcolor{Gray}
+\hline
+\hline
+Virtex SOC &Field Programmable Gate array with SOC capability&Than a multiple chip BOM this tends to be cheaper (from mouser) &1,54,582.82\\
+\rowcolor{Gray}
+\hline
+\hline
+Casing& For protection of the board& &6,500 \\
+\rowcolor{Gray}
+\hline
+\hline
+Accessory cards required &&  & 10,000  \\
+\hline
+\hline
+
+\rowcolor{Gray}
+
+Mechanical Fixtures& & & 15,000\\
+
+\rowcolor{Gray}
+\hline
+\hline
+Vivado Design suite&IDE and synthesis tools&Includes monthly EMI paid+few Private IPs&16,000 \\
+
+\hline
+\hline
+
+
+& Total & & XXXX
+\end{tabular}
+\end{table}
+
+
+
+\newpage
+\subsection{Resources required}
+\begin{center}
+\begin{tabular}{||p{3 cm} ||p{4 cm}|| p{6 cm}|| c|| }
+\arrayrulecolor{Azzurro}
+\hline
+\hline
+{\bfseries S.No} & {\bfseries Item Name}& {\bfseries Item Description} & {\bfseries Cost (Rs)} \\
+\hline
+\hline
+Nine extender's for accelerometer &straight cable D-pin connectors & Required for aesthetic connections & 1000\\
+\hline
+\hline
+Two mini USB extenders & Male to female mini USB connectors& Extend the communication from the embedded system to the computer, 3000 $\times$2 & 6000\\
+\hline
+\hline
+Windows 7/8 software & &   & 8000\\
+\hline
+\hline
+Ethernet switch & Required for networking & &1000\\
+\hline
+\hline
+Networking Cables & 2 to 3 cables & Required for networking &500\\
+\hline
+\hline
+& Total & & 16,500
+ 
+ \end{tabular}
+\end{center}
+
+
+
+
+
 \subsection{Total Budget}
 \begin{center}
 \begin{tabular}{||c ||p{6 cm}|| p{3 cm}|| c|| }
@@ -566,6 +710,10 @@ software design environment & This involves coding for three modes of operation 
 
 
 
+\section{Conclusion}
+With the rapid development of the field of industrial process control and the wide range of applications of network, intelligence, digital distributed control System, we generally design a higher data accuracy and
+reliability  control system. This embedded ARM system can adapt to the strict requirements of the data acquisition and control system such as the function, reliability, cost, size, power consumption, and remote access
+and so on. This system operated by DACS mode to acquire the signals and control the devices remotely. Embedded web server mode is used to share the data with clients in online. Both modes are efficiently carried out by real time multi tasking operating system (RTLinux). 
 
 
 
